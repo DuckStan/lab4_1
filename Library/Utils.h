@@ -2,6 +2,11 @@
 #define __UTILS_H__
 
 template <class T>
+bool operator ==(T& t1, T& t2) {
+    return t1 == t2;
+}
+
+template <class T>
 class ConstVectorIt {
 private:
     T* cur;
@@ -11,8 +16,8 @@ public:
 
     int operator !=(const ConstVectorIt&) const;
     int operator ==(const ConstVectorIt&) const;
-    const T& operator *();
-    const T* operator ->();
+     T& operator *();
+     T* operator ->();
     ConstVectorIt& operator ++();
     ConstVectorIt operator ++(int);
 };
@@ -20,6 +25,7 @@ public:
 template <class T>
 class Vector
 {
+    friend class ConstVectorIt<T>;
     T* data;
     int size;
     int cap;
@@ -38,7 +44,7 @@ public:
     void push_back(T);
     void clear();
     void create(const int& i);
-    void erase(const int& i);
+    void erase(int i);
     void resize(const int& n);
     ~Vector<T>(void);
 
@@ -62,12 +68,12 @@ int Vector<T>::Size(void) const
     return size;
 }
 template <class T>
-Vector<T>::const_iterator Vector<T>::begin() const {
-    return ConstVectorIt<T>(data[0]);
+typename Vector<T>::const_iterator Vector<T>::begin() const {
+    return ConstVectorIt<T>(&data[0]);
 }
 template <class T>
-Vector<T>::const_iterator Vector<T>::end() const {
-    return ConstVectorIt<T>(data[size - 1]);
+typename Vector<T>::const_iterator Vector<T>::end() const {
+    return ConstVectorIt<T>(&data[size - 1]);
 }
 template <class  T>
 T& Vector<T>::operator[](int i)
@@ -138,14 +144,14 @@ int Vector<T>::Capacity() const
 }
 
 template <class  T>
-void Vector<T>::erase(const int& i)
+void Vector<T>::erase(int i)
 {
     T* newdata = new T[cap];
     bool f = false;
 
     for (int j = 0; j < this->size; j++)
     {
-        if (j == i)
+        if (data[j] == data[i])
         {
             f = true;
         }
@@ -203,11 +209,11 @@ int ConstVectorIt<T>::operator ==(const ConstVectorIt<T>& it) const {
     return cur == it.cur;
 }
 template <class T>
-const T& ConstVectorIt<T>::operator *() {
+ T& ConstVectorIt<T>::operator *() {
     return *cur;
 }
 template <class T>
-const T* ConstVectorIt<T>::operator ->() {
+ T* ConstVectorIt<T>::operator ->() {
     return &*cur;
 }
 template <class T>

@@ -3,10 +3,10 @@
 #define _TABLE_H_
 
 #include <iostream>
-#include <vector>
+#include "Utils.h"
 #include "Army.h"
 #include <string>
-
+#include "Utils.h"
 
 namespace Matrix {
 	const char status[][20] = { "Ok", "Injured", "Dead", "Missing"};
@@ -16,9 +16,11 @@ namespace Matrix {
 		Army::Soldier *info;
 	};
 	std::ostream& operator <<(std::ostream& os, const Item& p);
+	class ConstTableIt;
+
 	class Table {
 	private:
-		std::vector<Item> arr;
+		Vector<Item> arr;
 		friend class ConstTableIt;
 		bool find_element(int g_key);
 	public:
@@ -39,11 +41,10 @@ namespace Matrix {
 	};
 	class ConstTableIt {
 	private:
-		std::vector<Item>::const_iterator cur;
+		Vector<Item>::const_iterator cur;
 	public:
 		ConstTableIt(){}
-		ConstTableIt(std::vector<Item>::iterator ob) :cur(ob) {}
-		ConstTableIt(std::vector<Item>::const_iterator ob) :cur(ob) {}
+		ConstTableIt(Vector<Item>::const_iterator ob) :cur(ob) {}
 		int operator !=(const ConstTableIt&) const;
 		int operator ==(const ConstTableIt&) const;
 		const Item& operator *();

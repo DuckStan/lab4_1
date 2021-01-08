@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include "Table.h"
 
 namespace Matrix{
@@ -8,34 +7,33 @@ namespace Matrix{
 	}
 	Table::Table(const Table& a)
 	{
-		std::vector<Item>::const_iterator p;
+		Vector<Item>::const_iterator p;
 		for (p = a.arr.begin(); p != a.arr.end(); ++p)
 			arr.push_back(*p);
 	}
 	Table::~Table()
 	{
-		std::vector<Item>::iterator p;
+		Vector<Item>::const_iterator p;
 		for (p = arr.begin(); p != arr.end(); ++p) {
 			delete p->info;
-			p->info = nullptr;
 		}
 	}
 	Table& Table::operator = (const Table& a)
 	{
-		std::vector<Item>::iterator p;
+		Vector<Item>::const_iterator p;
 		if (this != &a) {
 			for (p = arr.begin(); p != arr.end(); ++p)
 				delete p->info;
 			arr.clear();
 		
-			std::vector<Item>::const_iterator pp;
+			Vector<Item>::const_iterator pp;
 			for (pp = a.arr.begin(); pp != a.arr.end(); ++pp)
 				arr.push_back(*pp);
 		}
 		return *this;
 	}
 	bool Table::find_element(const int g_key) {
-		std::vector<Item>::iterator p;
+		Vector<Item>::const_iterator p;
 		for (p = arr.begin(); p != arr.end(); ++p) {
 			if (p->key == g_key) {
 				return true;
@@ -67,12 +65,15 @@ namespace Matrix{
 	{
 		bool res = false;
 		if (find_element(g_key)) {
-			std::vector<Item>::iterator p;
+			Vector<Item>::const_iterator p;
+			int i=0;
 			for (p = arr.begin(); p != arr.end(); ++p) {
+				i++;
 				if (p->key == g_key) break;
 			}
 			delete p->info;
-			arr.erase(p);
+			p->info = nullptr;
+			arr.erase(i);
 			res = true;
 		}
 		else {
@@ -89,7 +90,7 @@ namespace Matrix{
 				std::cout << "Wrong status!" << std::endl;
 				return res;
 			}
-			std::vector<Item>::iterator p;
+			Vector<Item>::const_iterator p;
 			for (p = arr.begin(); p != arr.end(); ++p) {
 				if (p->key == g_key) break;
 			}
@@ -110,7 +111,7 @@ namespace Matrix{
 				std::cout << "Wrong status!" << std::endl;
 				return res;
 			}
-			std::vector<Item>::iterator p, p_2;
+			Vector<Item>::const_iterator p, p_2;
 			for (p = arr.begin(); p != arr.end(); ++p) {
 				if (p->key == g_key) break;
 			}
@@ -137,7 +138,7 @@ namespace Matrix{
 	}
 	bool Table::edit_element(int g_key) {
 		bool res = false;
-		std::vector<Item>::iterator p;
+		Vector<Item>::const_iterator p;
 		if (find_element(g_key)) {
 			for (p = arr.begin(); p != arr.end(); ++p) {
 				if (p->key == g_key) break;
@@ -157,7 +158,7 @@ namespace Matrix{
 			if ((g_rank < 0) || (g_rank > 11)) {
 				throw std::exception("Wrong rank!");
 			}
-			std::vector<Item>::const_iterator p;
+			Vector<Item>::const_iterator p;
 			for (p = arr.begin(); p != arr.end(); ++p) {
 				if (p->info->my_rank() == g_rank) count++;
 			}
@@ -167,14 +168,14 @@ namespace Matrix{
 			if ((g_spec < 0) || (g_spec > 7)) {
 				throw std::exception("Wrong spec!");
 			}
-			std::vector<Item>::const_iterator p;
+			Vector<Item>::const_iterator p;
 			for (p = arr.begin(); p != arr.end(); ++p) {
 				if (p->info->my_spec() == g_spec) count++;
 			}
 			return count;
 		}
 		if (g_status == 69) {
-			std::vector<Item>::const_iterator p;
+			Vector<Item>::const_iterator p;
 			for (p = arr.begin(); p != arr.end(); ++p) {
 				count++;
 			}
@@ -184,7 +185,7 @@ namespace Matrix{
 			if ((g_status < 0) || (g_status > 3)) {
 				throw std::exception("Wrong status!");
 			}
-			std::vector<Item>::const_iterator p;
+			Vector<Item>::const_iterator p;
 			for (p = arr.begin(); p != arr.end(); ++p) {
 				if (p->status == g_status) count++;
 			}
@@ -194,7 +195,7 @@ namespace Matrix{
 	}
 	Table::Const_Iterator Table::find(const int g_key) const
 	{
-		std::vector<Item>::const_iterator p;
+		Vector<Item>::const_iterator p;
 		for (p = arr.begin(); p != arr.end(); ++p) {
 			if (p->key == g_key) {
 				return ConstTableIt(p);

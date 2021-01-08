@@ -49,35 +49,35 @@ namespace Shtabs {
 			case 0: return is;
 			case 1:
 				try {
-					Army::set_person_parameters(is, *this, 1);
+					person.set_person_parameters(is, 1);
 				}
 				catch (std::exception& ex) {
 					std::cout << ex.what() << std::endl;
 				}
 			case 2:
 				try {
-					Army::set_person_parameters(is, *this, 2);
+					person.set_person_parameters(is, 2);
 				}
 				catch (std::exception& ex) {
 					std::cout << ex.what() << std::endl;
 				}
 			case 3:
 				try {
-					Army::set_person_parameters(is, *this, 3);
+					person.set_person_parameters(is, 3);
 				}
 				catch (std::exception& ex) {
 					std::cout << ex.what() << std::endl;
 				}
 			case 4:
 				try {
-					Army::set_person_parameters(is, *this, 4);
+					person.set_person_parameters(is, 4);
 				}
 				catch (std::exception& ex) {
 					std::cout << ex.what() << std::endl;
 				}
 			case 5:
 				try {
-					Army::set_person_parameters(is, *this, 5);
+					person.set_person_parameters(is, 5);
 				}
 				catch (std::exception& ex) {
 					std::cout << ex.what() << std::endl;
@@ -207,7 +207,7 @@ namespace Shtabs {
 		}
 		return is;
 	}
-	Shtabs::Subdivision* Field_commander::get_subdivision() {
+	Subdivision* Field_commander::get_subdivision() {
 		return subdivision;
 	}
 	std::ostream& Max_commander::show(std::ostream& os, int condition)const {
@@ -237,7 +237,7 @@ namespace Shtabs {
 			throw std::exception("Instructions couldnt be gathered!");
 		}
 		return is;
-	}
+	} 
 	std::istream& Max_commander::edit(std::istream& is, int condition) {
 		Staff_officer::edit(is);
 		return is;

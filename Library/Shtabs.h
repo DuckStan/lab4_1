@@ -8,6 +8,8 @@
 
 namespace Shtabs {
 	const char locations[][20] = { "North", "South", "West", "East" };
+	/*template <class T>
+	int set_person_parameters(std::istream& is, T& obj, int p); */
 	class Subdivision {
 	private:
 		Matrix::Table table;
@@ -29,7 +31,6 @@ namespace Shtabs {
 	class Field_commander : public Army::Field_fighter, public Army::Staff_officer {
 	private:
 		Subdivision* subdivision;
-		Army::Person person;
 	protected:
 		virtual std::ostream& show(std::ostream&, int condition = 0)const;
 		virtual std::istream& get(std::istream&, int condition = 0);
@@ -39,9 +40,7 @@ namespace Shtabs {
 		virtual bool am_i_sanitar();
 	public:
 		~Field_commander();
-		template <class T>
-		friend int Army::set_person_parameters(std::istream& is, T& obj, int p);
-		Field_commander() : person(), Army::Field_fighter(), Army::Staff_officer(), subdivision() {}
+		Field_commander() : Army::Field_fighter(), Army::Staff_officer() { person = Army::Person(); subdivision = new Subdivision(); }
 		virtual Field_commander* clone() const {
 			return new Field_commander(*this);
 		}
@@ -51,7 +50,6 @@ namespace Shtabs {
 	class Max_commander : public Army::Staff_officer {
 	private:
 		Subdivision* subdivision;
-		Army::Person person;
 	protected:
 		virtual std::ostream& show(std::ostream&, int condition = 0)const;
 		virtual std::istream& get(std::istream&, int condition = 0);
@@ -61,9 +59,9 @@ namespace Shtabs {
 		virtual int my_spec();
 	public:
 		~Max_commander();
-		template <class T>
-		friend int Army::set_person_parameters(std::istream& is, T& obj, int p);
-		Max_commander() : person(), Staff_officer(), subdivision() {}
+		/*template <class T>
+		friend int set_person_parameters(std::istream& is, T& obj, int p); */
+		Max_commander() : Staff_officer(), subdivision() { person = Army::Person(); }
 		virtual Max_commander* clone() const {
 			return new Max_commander(*this);
 		}
@@ -72,10 +70,11 @@ namespace Shtabs {
 	};
 	class Infield {
 	private:
-		Field_commander* commander_1 = nullptr, * commander_2 = nullptr;
+		Field_commander* commander_1, * commander_2;
 		int location;
 		int duration;
 	public:
+		Infield() :location(0), duration(0) { commander_1 = new Field_commander(); commander_2 = new Field_commander(); };
 		int get_duration() const { return duration; }
 		const char* get_location() const { return locations[location]; }
 		int set_duration(int g_duration) { duration = g_duration; return 0; }
